@@ -1,0 +1,140 @@
+---
+title: "Script_de_amostragem"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Exercício de amostragem
+
+Carregamento do dataset
+```{r}
+library(ggplot2)
+d <- diamonds
+```
+
+Geração de amosrtras 
+o espaço em branco após a virgula indica que todos os itens serão pegos
+```{r}
+a1 <- d[1:3000,] 
+```
+
+
+Cálculo da média da var price da população e da amostra (para pegar uma variável dentro do dataframe utiliza-se $)
+```{r}
+mean(d$price)
+mean(a1$price)
+```
+
+
+Cálculo da mediana da var price da população e da amostra
+```{r}
+median(d$price)
+median(a1$price)
+```
+
+
+Cálculo do descio padrão da var price da população e da amostra
+```{r}
+sd(d$price)
+sd(a1$price)
+```
+
+
+Pegar nova amostra
+```{r}
+a2 <- d[3001:6000,]
+mean(d$price) 
+mean(a1$price)
+mean(a2$price)
+median(d$price)
+median(a1$price)
+median(a2$price)
+sd(d$price)
+sd(a1$price)
+sd(a2$price)
+```
+
+
+Geração de amostra aleatória
+```{r}
+sample(3)
+```
+
+Definição da semente de elatoriedade (manter o mesmo conjunto de dados)
+```{r}
+set.seed(33)
+sample(3)
+```
+
+Geração de vetor de números aleatórios
+```{r}
+vn <- sample(53940)
+```
+
+Geração de amostra aleatória
+```{r}
+a3 <- d[vn[1:3000],]
+```
+
+Análise dos indicadores
+```{r}
+mean(a3$price)
+median(a3$price)
+sd(a3$price)
+```
+
+
+Histograma
+```{r}
+hist(d$price)
+hist(a1$price)
+hist(a2$price)
+hist(a3$price)
+```
+
+
+Boxplot
+simbolo ~ representa "em relação a"
+gráfico de preços em relação ao corte do diamante
+```{r}
+boxplot(price~cut, data=d)
+```
+
+Comando summary apresenta os elementos principais do dataset
+```{r}
+summary(d$price)
+summary(a3$price)
+```
+
+
+comando para criar duas colunas no frame de visualização
+ideal para colocar gráficos lado a lado de datasets diferentes
+```{r}
+par(mfrow=(c(1,2))) # para voltar ao normal par(mfrow=(c(1,1)))
+boxplot(d$price)
+boxplot(a3$price)
+```
+
+
+Gráfico de dispersão
+```{r}
+m <- mtcars
+plot(m$mpg~m$wt)
+```
+
+cálculo do coeficiente de correlação linear
+positivo = relação direta
+negativo = relação inversa
+quanto mais perto de 1 (e -1) mais se parece com uma reta
+```{r}
+cor(m$mpg, m$wt)
+plot(m$mpg~m$hp)
+```
+
+relação de todas as variáveis em relação a todas a variaveis
+```{r}
+cor(m)
+```
+
