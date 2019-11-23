@@ -1,0 +1,71 @@
+---
+title: "Teste de modelos"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+carregando os datasets
+```{r}
+train <- read.csv(file="~/bb_kaggle/train.csv")
+test <- read.csv(file="~/bb_kaggle/test.csv")
+```
+
+criar a feature venda para poder juntar os datasets
+```{r}
+test$venda <- 0
+b <- rbind(train, test)
+tail(b)
+```
+
+
+criar as novas variáveis
+```{r}
+b$fds <- ifelse(b$weekday=='sexta-feira'|b$weekday=='s?bado'|b$weekday=='domingo', 1,0)
+b$fds2 <- ifelse(b$weekday=='s?bado'|b$weekday=='domingo', 1,0)
+head(b)
+b$margem_inter <- cut(b$margem, seq(0,0.60,length.out = 11), labels=c(1:10))
+head(b)
+```
+
+
+dividindo novamente os datasets
+```{r}
+treino_2 <- b[1:365,]
+head(treino_2)
+
+teste_2 <- b[366:396,]
+head(teste_2)
+```
+
+removendo a variavel venda
+```{r}
+teste_2 <- subset(teste_2, select = -c(venda))
+```
+
+
+##Testes de modelos
+```{r}
+mod <- lm(venda~desconto+fds+outdesc, data = treino_2)
+summary(mod)
+p <- predict(mod, newdata=teste_2)
+p <- as.data.frame(cbind(1:31,p))
+names(p)<-c("id","venda")
+write.csv(p, file="predict.csv", row.names=FALSE)
+```
+
+
+```{r}
+library(e1071)
+mod <- svm(venda~desconto+fds+outdesc, data = treino_2)
+summary(mod)
+p <- predict(mod, newdata=teste_2)
+p <- as.data.frame(cbind(1:31,p))
+names(p)<-c("id","venda")
+write.csv(p, file="predict.csv", row.names=FALSE)
+```
+
+
+
